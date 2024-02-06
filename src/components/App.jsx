@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './styles.css';
 import Searchbar from './Searchbar';
 import ImageGallery from './ImageGallery';
@@ -17,11 +17,15 @@ const App = () => {
   const [showModal, setShowModal] = useState(false);
   const [modalImage, setModalImage] = useState('');
 
+  useEffect(() => {
+    if (query === '') return;
+    fetchImages(query, page);
+  }, [query, page]);
+
   const handleSubmit = (newQuery) => {
     setQuery(newQuery);
     setPage(1);
     setImages([]);
-    fetchImages(newQuery, 1);
   };
 
   const fetchImages = async (query, page) => {
@@ -45,7 +49,6 @@ const App = () => {
 
   const loadMoreImages = () => {
     setPage((prevPage) => prevPage + 1);
-    fetchImages(query, page + 1);
   };
 
   const openModal = (imageUrl) => {
